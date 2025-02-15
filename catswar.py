@@ -4,7 +4,7 @@ class RatinhosSprite(pygame.sprite.Sprite):
   def __init__(self, x, y):
     pygame.sprite.Sprite.__init__(self)
     ratinho_img  = pygame.image.load('ratinho.png').convert_alpha()
-    ratinho_img = pygame.transform.scale(ratinho_img, (260//3, 260//3))
+    ratinho_img = pygame.transform.scale(ratinho_img, (230//3, 100//3))
     self.image = ratinho_img
     self.rect = ratinho_img.get_rect()
     self.rect.topleft = (x, y)
@@ -35,7 +35,7 @@ clock = pygame.time.Clock()
 letra_grande = pygame.font.Font(None, 50)
 letra_pequena = pygame.font.Font(None, 25)
 
-lista_ratinhos = [RatinhosSprite(10, 100), RatinhosSprite(500, 60), RatinhosSprite(190, 150), RatinhosSprite(400, 200), RatinhosSprite(80, 250), RatinhosSprite(300, 300)]
+lista_ratinhos = [RatinhosSprite(250, 5), RatinhosSprite(10, 100), RatinhosSprite(500, 50), RatinhosSprite(190, 150), RatinhosSprite(400, 200), RatinhosSprite(80, 250), RatinhosSprite(300, 300)]
 sprites_ratinhos = pygame.sprite.Group([lista_ratinhos])
 
 # gatinho = []
