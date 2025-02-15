@@ -51,15 +51,21 @@ while True:
             if tela_atual == "inicio" and event.key == pygame.K_RETURN:
                 tela_atual = "selecao"
             elif tela_atual == "selecao":
-                if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]:
-                    tela_atual = "jogo"
-            elif tela_atual == "jogo":
-                if event.key == pygame.K_w: # tá assim só pra dar pra ver a tela tanto de vitória quanto derrota
-                    tela_atual = "vitoria"
-                elif event.key == pygame.K_x: # mudar esses elif's por completo depois
-                    tela_atual = "derrota"
+                if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]:  # Escolhe o gatinho
+                    tela_atual = "dificuldade"
+            elif tela_atual == "dificuldade":
+                if event.key in [pygame.K_1, pygame.K_2]:
+                    if event.key == pygame.K_1:
+                        tela_atual = "jogofacil"
+                    elif event.key == pygame.K_2:
+                        tela_atual = "jogodificil"
+            elif tela_atual == "jogofacil":
+                if event.key == pygame.K_w:
+                    tela_atual = "vitoria" # tá assim só pra dar pra ver a tela tanto de vitória quanto derrota
+                elif event.key == pygame.K_x: 
+                    tela_atual = "derrota" # mudar esses elif's por completo depois
             elif tela_atual in ["vitoria", "derrota"] and event.key == pygame.K_RETURN:
-                tela_atual = "inicio" 
+                tela_atual = "inicio"  
 
     screen.fill((255, 255, 255))
 
@@ -77,6 +83,10 @@ while True:
 
         screen.blit(gatinhos_img, (x_base, y_base))
 
+    elif tela_atual == "dificuldade":
+        desenhar_texto("Dificuldade do jogo:", letra_grande, (0, 0, 0), 10)
+        desenhar_texto("1 - Fácil | 2 - Difícil", letra_pequena, (0, 0, 0), 240)
+
     elif tela_atual == "selecao":
         desenhar_texto("Escolha seu gatinho!", letra_grande, (0, 0, 0), 30)
         desenhar_texto("1 - Cinza    |   2 - Siamês   |   3 - Preto   |    4 - Laranja   ", letra_pequena, (0, 0, 0), 155)
@@ -89,8 +99,7 @@ while True:
 
         screen.blit(gatinhos_img, (x_base, y_base))
 
-    elif tela_atual == "jogo":
-
+    elif tela_atual == "jogofacil":
         '''hit_list = pygame.sprite.spritecollide(pacman, sprites_cerejas, True)
         todos_sprites.remove(hit_list)
         sprites_cerejas.remove(hit_list)
@@ -98,6 +107,10 @@ while True:
         todos_sprites.update() # chama a função update de todos os sprites
 
         screen.fill((255, 255, 255)) # limpa a tela'''
+
+        sprites_ratinhos.draw(screen)
+
+    elif tela_atual == "jogofacil":
 
         sprites_ratinhos.draw(screen)
 
