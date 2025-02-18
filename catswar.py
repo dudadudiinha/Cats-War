@@ -65,6 +65,11 @@ while True:
                     tela_atual = "vitoria" # tá assim só pra dar pra ver a tela tanto de vitória quanto derrota
                 elif event.key == pygame.K_x: 
                     tela_atual = "derrota" # mudar esses elif's por completo depois
+            elif tela_atual == "jogodificil":
+                if event.key == pygame.K_w:
+                    tela_atual = "vitoria"
+                elif event.key == pygame.K_x: 
+                    tela_atual = "derrota"
             elif tela_atual in ["vitoria", "derrota"] and event.key == pygame.K_RETURN:
                 tela_atual = "inicio"  
 
