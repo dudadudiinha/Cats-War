@@ -38,7 +38,7 @@ letra_pequena = pygame.font.Font(None, 25)
 lista_ratinhos = [RatinhosSprite(250, 5), RatinhosSprite(10, 100), RatinhosSprite(500, 50), RatinhosSprite(190, 150), RatinhosSprite(400, 200), RatinhosSprite(80, 250), RatinhosSprite(300, 300)]
 sprites_ratinhos = pygame.sprite.Group([lista_ratinhos])
 
-# gatinho = []
+gatinho_escolhido = None
 
 tela_atual = "inicio" 
 
@@ -51,7 +51,8 @@ while True:
             if tela_atual == "inicio" and event.key == pygame.K_RETURN:
                 tela_atual = "selecao"
             elif tela_atual == "selecao":
-                if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]:  # Escolhe o gatinho
+                if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]:
+                    gatinho_escolhido = event.key
                     tela_atual = "dificuldade"
             elif tela_atual == "dificuldade":
                 if event.key in [pygame.K_1, pygame.K_2]:
@@ -85,7 +86,7 @@ while True:
 
     elif tela_atual == "dificuldade":
         desenhar_texto("Dificuldade do jogo:", letra_grande, (0, 0, 0), 10)
-        desenhar_texto("1 - Fácil | 2 - Difícil", letra_pequena, (0, 0, 0), 240)
+        escolha = desenhar_texto("1 - Fácil | 2 - Difícil", letra_pequena, (0, 0, 0), 240)
 
     elif tela_atual == "selecao":
         desenhar_texto("Escolha seu gatinho!", letra_grande, (0, 0, 0), 30)
@@ -110,7 +111,7 @@ while True:
 
         sprites_ratinhos.draw(screen)
 
-    elif tela_atual == "jogofacil":
+    elif tela_atual == "jogodificil":
 
         sprites_ratinhos.draw(screen)
 
@@ -118,11 +119,25 @@ while True:
         desenhar_texto("Você venceu!", letra_grande, (0, 0, 0), 30)
         desenhar_texto("Tecle ENTER para jogar novamente", letra_pequena, (0, 0, 0), 430)
 
-        gatopretov_img = pygame.image.load('gatopreto_vitoria.png').convert_alpha()
+        imagens_gatinhos = {
+            pygame.K_1: 'gatocinza_vitoria.png',
+            pygame.K_2: 'gatomarrom_vitoria.png',
+            pygame.K_3: 'gatopreto_vitoria.png',
+            pygame.K_4: 'gatolaranja_vitoria.png'
+        }
+        
+        if gatinho_escolhido in imagens_gatinhos:
+            gatinho_img = pygame.image.load(imagens_gatinhos[gatinho_escolhido]).convert_alpha()
+            gatinho_img = pygame.transform.scale(gatinho_img, (641//2, 541//2))
+            x_centro = (640//2)-(gatinho_img.get_width()//2)
+            y_centro = (480//2)-(gatinho_img.get_height()//2)
+            screen.blit(gatinho_img, (x_centro, y_centro))
+
+        '''gatopretov_img = pygame.image.load('gatopreto_vitoria.png').convert_alpha()
         gatopretov_img = pygame.transform.scale(gatopretov_img, (641//2, 541//2))
         x_centro = (640//2)-(gatopretov_img.get_width()//2)
         y_centro = (480//2)-(gatopretov_img.get_height()//2)
-        screen.blit(gatopretov_img, (x_centro, y_centro))
+        screen.blit(gatopretov_img, (x_centro, y_centro))'''
 
     elif tela_atual == "derrota":
         desenhar_texto("Você perdeu!", letra_grande, (0, 0, 0), 30)
