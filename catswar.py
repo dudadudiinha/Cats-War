@@ -116,9 +116,35 @@ while True:
 
         sprites_ratinhos.draw(screen)
 
+        gatinhos_images = {
+            pygame.K_1: 'gatinhocinza.png',
+            pygame.K_2: 'gatinhomarrom.png',
+            pygame.K_3: 'gatinhopreto.png',
+            pygame.K_4: 'gatinholaranja.png'
+        }
+        
+        if gatinho_escolhido in gatinhos_images:
+            gatinho_image = pygame.image.load(gatinhos_images[gatinho_escolhido]).convert_alpha()
+            gatinho_image = pygame.transform.scale(gatinho_image, (641//11, 541//11))
+            x_centro = (640//2)-(gatinho_image.get_width()//2)
+            screen.blit(gatinho_image, (x_centro, 420))
+
     elif tela_atual == "jogodificil":
 
         sprites_ratinhos.draw(screen)
+
+        gatinhos_images = {
+            pygame.K_1: 'gatinhocinza.png',
+            pygame.K_2: 'gatinhomarrom.png',
+            pygame.K_3: 'gatinhopreto.png',
+            pygame.K_4: 'gatinholaranja.png'
+        }
+        
+        if gatinho_escolhido in gatinhos_images:
+            gatinho_image = pygame.image.load(gatinhos_images[gatinho_escolhido]).convert_alpha()
+            gatinho_image = pygame.transform.scale(gatinho_image, (641//11, 541//11))
+            x_centro = (640//2)-(gatinho_image.get_width()//2)
+            screen.blit(gatinho_image, (x_centro, 420))
 
     elif tela_atual == "vitoria":
         desenhar_texto("Você venceu!", letra_grande, (0, 0, 0), 30)
@@ -137,12 +163,6 @@ while True:
             x_centro = (640//2)-(gatinho_img.get_width()//2)
             y_centro = (480//2)-(gatinho_img.get_height()//2)
             screen.blit(gatinho_img, (x_centro, y_centro))
-
-        '''gatopretov_img = pygame.image.load('gatopreto_vitoria.png').convert_alpha()
-        gatopretov_img = pygame.transform.scale(gatopretov_img, (641//2, 541//2))
-        x_centro = (640//2)-(gatopretov_img.get_width()//2)
-        y_centro = (480//2)-(gatopretov_img.get_height()//2)
-        screen.blit(gatopretov_img, (x_centro, y_centro))'''
 
     elif tela_atual == "derrota":
         desenhar_texto("Você perdeu!", letra_grande, (0, 0, 0), 30)
