@@ -8,7 +8,23 @@ class RatinhosSprite(pygame.sprite.Sprite):
     self.image = ratinho_img
     self.rect = ratinho_img.get_rect()
     self.rect.topleft = (x, y)
+    '''x = 47
+    velocidade = 5
+    if x >= 640:
+        velocidade = -velocidade
+    else:
+        pass'''
     # ver como fazer a locomoção dos ratos
+
+  def update(self):
+    velocidade = 5
+    self.rect.move_ip(velocidade,0)
+    '''x += velocidade
+    
+    if x > largura or x < 0:
+        velocidade = -velocidade'''
+
+
 '''
 # tentanto enter esse trecho do código de Alexandre e como ele pode contribuir para o código
 class GatinhoSprite(pygame.sprite.Sprite):
@@ -23,8 +39,8 @@ class GatinhoSprite(pygame.sprite.Sprite):
     self.sentido = 1 # 1 = para a direita, -1 = para a esquerda
     '''
 
-def desenhar_texto(texto, fonte, cor, y):
-    render = fonte.render(texto, True, cor)
+def desenhar_texto(texto, fonte, y):
+    render = fonte.render(texto, True, 'black')
     x = (640//2) - (render.get_width()//2)
     screen.blit(render, (x, y))
 
@@ -76,10 +92,10 @@ while True:
     screen.fill((255, 255, 255))
 
     if tela_atual == "inicio":
-        desenhar_texto("Cats War", letra_grande, (0, 0, 0), 30)
-        desenhar_texto("Ajude os gatinhos a derrotar", letra_pequena, (0, 0, 0), 65)
-        desenhar_texto("os ratinhos do mal!", letra_pequena, (0, 0, 0), 81)
-        desenhar_texto("Pressione ENTER para começar", letra_pequena, (0, 0, 0), 400)
+        desenhar_texto("Cats War", letra_grande, 30)
+        desenhar_texto("Ajude os gatinhos a derrotar", letra_pequena, 65)
+        desenhar_texto("os ratinhos do mal!", letra_pequena, 81)
+        desenhar_texto("Pressione ENTER para começar", letra_pequena, 400)
 
         gatinhos_img = pygame.image.load('gatinhos.png').convert_alpha()
         gatinhos_img = pygame.transform.scale(gatinhos_img, (461, 101))
@@ -90,12 +106,12 @@ while True:
         screen.blit(gatinhos_img, (x_base, y_base))
 
     elif tela_atual == "dificuldade":
-        desenhar_texto("Dificuldade do jogo:", letra_grande, (0, 0, 0), 10)
-        escolha = desenhar_texto("1 - Fácil | 2 - Difícil", letra_pequena, (0, 0, 0), 240)
+        desenhar_texto("Dificuldade do jogo:", letra_grande, 10)
+        escolha = desenhar_texto("1 - Fácil | 2 - Difícil", letra_pequena, 240)
 
     elif tela_atual == "selecao":
-        desenhar_texto("Escolha seu gatinho!", letra_grande, (0, 0, 0), 30)
-        desenhar_texto("1 - Cinza    |   2 - Siamês   |   3 - Preto   |    4 - Laranja   ", letra_pequena, (0, 0, 0), 155)
+        desenhar_texto("Escolha seu gatinho!", letra_grande, 30)
+        desenhar_texto("1 - Cinza    |   2 - Siamês   |   3 - Preto   |    4 - Laranja   ", letra_pequena, 155)
 
         gatinhos_img = pygame.image.load('gatinhos.png').convert_alpha()
         gatinhos_img = pygame.transform.scale(gatinhos_img, (461, 101))
@@ -113,7 +129,7 @@ while True:
         todos_sprites.update() # chama a função update de todos os sprites
 
         screen.fill((255, 255, 255)) # limpa a tela'''
-
+        sprites_ratinhos.update()
         sprites_ratinhos.draw(screen)
 
         gatinhos_images = {
@@ -147,8 +163,8 @@ while True:
             screen.blit(gatinho_image, (x_centro, 420))
 
     elif tela_atual == "vitoria":
-        desenhar_texto("Você venceu!", letra_grande, (0, 0, 0), 30)
-        desenhar_texto("Tecle ENTER para jogar novamente", letra_pequena, (0, 0, 0), 430)
+        desenhar_texto("Você venceu!", letra_grande, 30)
+        desenhar_texto("Tecle ENTER para jogar novamente", letra_pequena, 430)
 
         imagens_gatinhos = {
             pygame.K_1: 'gatocinza_vitoria.png',
@@ -165,8 +181,8 @@ while True:
             screen.blit(gatinho_img, (x_centro, y_centro))
 
     elif tela_atual == "derrota":
-        desenhar_texto("Você perdeu!", letra_grande, (0, 0, 0), 30)
-        desenhar_texto("Tecle ENTER para jogar novamente", letra_pequena, (0, 0, 0), 430)
+        desenhar_texto("Você perdeu!", letra_grande, 30)
+        desenhar_texto("Tecle ENTER para jogar novamente", letra_pequena,430)
 
         ratinho_derrota_img = pygame.image.load('ratinho_derrota.png').convert_alpha()
         ratinho_derrota_img = pygame.transform.scale(ratinho_derrota_img, (641//2, 541//2))
