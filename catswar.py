@@ -8,36 +8,11 @@ class RatinhosSprite(pygame.sprite.Sprite):
     self.image = ratinho_img
     self.rect = ratinho_img.get_rect()
     self.rect.topleft = (x, y)
-    '''x = 47
-    velocidade = 5
-    if x >= 640:
-        velocidade = -velocidade
-    else:
-        pass'''
     # ver como fazer a locomoção dos ratos
 
   def update(self):
     velocidade = 5
     self.rect.move_ip(velocidade,0)
-    '''x += velocidade
-    
-    if x > largura or x < 0:
-        velocidade = -velocidade'''
-
-
-'''
-# tentanto enter esse trecho do código de Alexandre e como ele pode contribuir para o código
-class GatinhoSprite(pygame.sprite.Sprite):
-  def __init__(self, img):
-    pygame.sprite.Sprite.__init__(self)
-    img = pygame.image.load('pacman.png').convert_alpha()
-    self.img_1 = pygame.transform.scale(img, (100, 100))
-    self.rect = self.image.get_rect()
-    self.rect.topleft = (320, 430)
-    # variáveis para controlar a movimentação do pacman
-    self.velocidade = 5
-    self.sentido = 1 # 1 = para a direita, -1 = para a esquerda
-    '''
 
 def desenhar_texto(texto, fonte, y):
     render = fonte.render(texto, True, 'black')
@@ -122,13 +97,6 @@ while True:
         screen.blit(gatinhos_img, (x_base, y_base))
 
     elif tela_atual == "jogofacil":
-        '''hit_list = pygame.sprite.spritecollide(pacman, sprites_cerejas, True)
-        todos_sprites.remove(hit_list)
-        sprites_cerejas.remove(hit_list)
-
-        todos_sprites.update() # chama a função update de todos os sprites
-
-        screen.fill((255, 255, 255)) # limpa a tela'''
         sprites_ratinhos.update()
         sprites_ratinhos.draw(screen)
 
@@ -147,6 +115,7 @@ while True:
 
     elif tela_atual == "jogodificil":
 
+        sprites_ratinhos.update()
         sprites_ratinhos.draw(screen)
 
         gatinhos_images = {
