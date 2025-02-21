@@ -22,6 +22,32 @@ class RatinhosSprite(pygame.sprite.Sprite):
     self.rect.x += self.velocidade_x
     if self.rect.left <= 0 or self.rect.right >= 640:
         self.velocidade_x = -self.velocidade_x
+        self.image = pygame.transform.flip(self.image, True, False)
+
+class Bolas_de_peloSprite(pygame.sprite.Sprite):
+  def __init__(self, x, y, gatinho_escolhido):
+    pygame.sprite.Sprite.__init__(self)
+    bolinhas_images = {
+            pygame.K_1: 'bola_cinza.png',
+            pygame.K_2: 'bola_marrom.png',
+            pygame.K_3: 'bola_preta.png',
+            pygame.K_4: 'bola_laranja.png'
+        }
+    if gatinho_escolhido in bolinhas_images:
+        bolinhas_image = pygame.image.load(bolinhas_images[gatinho_escolhido]).convert_alpha()
+        bolinhas_image = pygame.transform.scale(bolinhas_image, (701//35, 648//35))
+        x_centrob = ((640//2)-(bolinhas_image.get_width()//2))-5.5
+        screen.blit(bolinhas_image, (x_centrob, 360))
+    self.image = bolinhas_image
+    self.rect = bolinhas_image.get_rect()
+    self.rect.topleft = (x, y)
+
+    '''def movimento(self, y):
+        y = 380
+        self
+        self.rect += self.velocidade_y
+        if self.rect.topleft <= 380 or self.rect.topright >= 0:
+            self.velocidade_x = -self.velocidade_x'''
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
@@ -56,6 +82,7 @@ while True:
                 if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]:
                     gatinho_escolhido = event.key
                     tela_atual = "dificuldade"
+                    sprite_bola = Bolas_de_peloSprite(-10, -10, gatinho_escolhido)
             elif tela_atual == "dificuldade":
                 if event.key in [pygame.K_1, pygame.K_2]:
                     if event.key == pygame.K_1:
@@ -137,21 +164,18 @@ while True:
             x_centro -= 4
         if teclas[pygame.K_RIGHT] and x_centro < 640 - gatinho_image.get_width():
             x_centro += 4
+        if teclas[pygame.K_SPACE]:
+            sprite_bola.rect.topleft = (x_centro, 380)
+            
 
         screen.blit(gatinho_image, (x_centro, 380))
-        
-        '''bolinhas_images = {
-            pygame.K_1: 'bola_cinza.png',
-            pygame.K_2: 'bola_marrom.png',
-            pygame.K_3: 'bola_preta.png',
-            pygame.K_4: 'bola_laranja.png'
-        }
-       
-        if gatinho_escolhido in gatinhos_images:
-            bolinhas_image = pygame.image.load(bolinhas_images[gatinho_escolhido]).convert_alpha()
-            bolinhas_image = pygame.transform.scale(bolinhas_image, (701//35, 648//35))
-            x_centrob = ((640//2)-(bolinhas_image.get_width()//2))-5.5
-            screen.blit(bolinhas_image, (x_centrob, 360))'''
+        screen.blit(sprite_bola.image, sprite_bola.rect.topleft)
+
+        '''colisao = pygame.sprite.spritecollide(sprites_ratinhos, sprite_bola, True)
+        sprite_bola.remove(colisao)'''
+
+        '''if sprite_bola == None:
+            tela_atual == "vitoria"'''
 
     elif tela_atual == "vitoria":
         desenhar_texto("Você venceu!", letra_grande, 30)
