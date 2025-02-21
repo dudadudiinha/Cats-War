@@ -1,4 +1,5 @@
 import pygame
+import time
 
 def desenhar_texto(texto, fonte, y):
     render = fonte.render(texto, True, 'black')
@@ -13,7 +14,7 @@ class RatinhosSprite(pygame.sprite.Sprite):
         if dificuldade == 'facil':
             self.velocidade_x = 4
         else:
-            self.velocidade_x = 6
+            self.velocidade_x = 7
         self.image = ratinho_img
         self.rect = ratinho_img.get_rect()
         self.rect.topleft = (x, y)
@@ -59,6 +60,8 @@ letra_grande = pygame.font.Font(None, 50)
 letra_media = pygame.font.Font(None, 40)
 letra_pequena = pygame.font.Font(None, 25)
 
+tempo_limite = None
+
 tela_atual = "inicio"
 
 if tela_atual == "jogofacil":
@@ -91,9 +94,13 @@ while True:
                     if event.key == pygame.K_1:
                         tela_atual = "jogofacil"
                         dificuldade_atual = "facil"
+                        tempo_limite = 8
                     elif event.key == pygame.K_2:
                         tela_atual = "jogodificil"
                         dificuldade_atual = "dificil"
+                        tempo_limite = 5
+
+                    tempo_inicial = pygame.time.get_ticks()    
 
                     lista_ratinhos = [
                         RatinhosSprite(250, 5, dificuldade_atual),
@@ -115,12 +122,6 @@ while True:
                 if event.key == pygame.K_SPACE and sprite_bola.atirando == False:
                     sprite_bola.rect.topleft = (x_centro, 380)
                     sprite_bola.atirando = True
-                if event.key == pygame.K_w:
-                    tela_atual = "vitoria" 
-                elif event.key == pygame.K_x:
-                    tela_atual = "derrota"
-                elif tela_atual in ["vitoria", "derrota"] and event.key == pygame.K_RETURN:
-                    tela_atual = "inicio" 
 
     screen.fill((255, 255, 255))
 
@@ -155,7 +156,11 @@ while True:
         screen.blit(gatinhos_img, (x_base, y_base))
 
     elif tela_atual in ["jogofacil", "jogodificil"]:
+        tempo_passado = (pygame.time.get_ticks()-tempo_inicial)//1000
+
         desenhar_texto("Tecle ESPAÇO para atirar", pygame.font.Font(None, 20), 445)
+        texto = pygame.font.Font(None, 25).render(f"Tempo: {tempo_passado}s", True, 'black')
+        screen.blit(texto, (10, 440))
 
         sprites_ratinhos.update()
         sprites_ratinhos.draw(screen)
@@ -176,6 +181,12 @@ while True:
                 sprite_bola.rect.topleft = (-0, -0)
 
         screen.blit(gatinho_image, (x_centro, 380))
+
+        if len(sprites_ratinhos) == 0 and tempo_passado <= tempo_limite:
+            tela_atual = "vitoria"
+
+        if len(sprites_ratinhos) > 0 and tempo_passado >= tempo_limite:
+            tela_atual = "derrota"
 
     elif tela_atual == "vitoria":
         desenhar_texto("Parabéns! Você conseguiu", letra_media, 30)
