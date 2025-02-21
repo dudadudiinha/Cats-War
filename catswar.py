@@ -10,7 +10,6 @@ class RatinhosSprite(pygame.sprite.Sprite):
     pygame.sprite.Sprite.__init__(self)
     ratinho_img  = pygame.image.load('ratinho.png').convert_alpha()
     ratinho_img = pygame.transform.scale(ratinho_img, (153//2, 66//2))
-    print(dificuldade)
     if dificuldade == 'facil':
         self.velocidade_x = 3
     else:
