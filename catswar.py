@@ -6,54 +6,57 @@ def desenhar_texto(texto, fonte, y):
     screen.blit(render, (x, y))
 
 class RatinhosSprite(pygame.sprite.Sprite):
-  def __init__(self, x, y, dificuldade):
-    pygame.sprite.Sprite.__init__(self)
-    ratinho_img  = pygame.image.load('ratinho.png').convert_alpha()
-    ratinho_img = pygame.transform.scale(ratinho_img, (153//2, 66//2))
-    if dificuldade == 'facil':
-        self.velocidade_x = 3
-    else:
-        self.velocidade_x = 6
-    self.image = ratinho_img
-    self.rect = ratinho_img.get_rect()
-    self.rect.topleft = (x, y)
+    def __init__(self, x, y, dificuldade):
+        pygame.sprite.Sprite.__init__(self)
+        ratinho_img  = pygame.image.load('ratinho.png').convert_alpha()
+        ratinho_img = pygame.transform.scale(ratinho_img, (153//2, 66//2))
+        if dificuldade == 'facil':
+            self.velocidade_x = 4
+        else:
+            self.velocidade_x = 6
+        self.image = ratinho_img
+        self.rect = ratinho_img.get_rect()
+        self.rect.topleft = (x, y)
 
-  def update(self):
-    self.rect.x += self.velocidade_x
-    if self.rect.left <= 0 or self.rect.right >= 640:
-        self.velocidade_x = -self.velocidade_x
-        self.image = pygame.transform.flip(self.image, True, False)
+    def update(self):
+        self.rect.x += self.velocidade_x
+        if self.rect.left <= 0 or self.rect.right >= 640:
+            self.velocidade_x = -self.velocidade_x
+            self.image = pygame.transform.flip(self.image, True, False)
 
 class Bolas_de_peloSprite(pygame.sprite.Sprite):
-  def __init__(self, x, y, gatinho_escolhido):
-    pygame.sprite.Sprite.__init__(self)
-    bolinhas_images = {
-            pygame.K_1: 'bola_cinza.png',
-            pygame.K_2: 'bola_marrom.png',
-            pygame.K_3: 'bola_preta.png',
-            pygame.K_4: 'bola_laranja.png'
-        }
-    if gatinho_escolhido in bolinhas_images:
-        bolinhas_image = pygame.image.load(bolinhas_images[gatinho_escolhido]).convert_alpha()
-        bolinhas_image = pygame.transform.scale(bolinhas_image, (701//35, 648//35))
-        x_centrob = ((640//2)-(bolinhas_image.get_width()//2))-5.5
-        screen.blit(bolinhas_image, (x_centrob, 360))
-    self.image = bolinhas_image
-    self.rect = bolinhas_image.get_rect()
-    self.rect.topleft = (x, y)
+    def __init__(self, x, y, gatinho_escolhido):
+        pygame.sprite.Sprite.__init__(self)
+        bolinhas_images = {
+                pygame.K_1: 'bola_cinza.png',
+                pygame.K_2: 'bola_marrom.png',
+                pygame.K_3: 'bola_preta.png',
+                pygame.K_4: 'bola_laranja.png'
+            }
+        if gatinho_escolhido in bolinhas_images:
+            bolinhas_image = pygame.image.load(bolinhas_images[gatinho_escolhido]).convert_alpha()
+            bolinhas_image = pygame.transform.scale(bolinhas_image, (701//35, 648//35))
+            x_centrob = ((640//2)-(bolinhas_image.get_width()//2))-5.5
+            screen.blit(bolinhas_image, (x_centrob, 360))
+        self.image = bolinhas_image
+        self.rect = bolinhas_image.get_rect()
+        self.rect.topleft = (x, y)
+        self.velocidade = -9
+        self.atirando = False
 
-    '''def movimento(self, y):
-        y = 380
-        self
-        self.rect += self.velocidade_y
-        if self.rect.topleft <= 380 or self.rect.topright >= 0:
-            self.velocidade_x = -self.velocidade_x'''
+    def update(self):
+        if self.atirando:
+            self.rect.y += self.velocidade
+            if self.rect.bottom < 0:
+                self.atirando = False
 
 pygame.init()
+pygame.display.set_caption("Cats War")
 screen = pygame.display.set_mode((640, 480))
 clock = pygame.time.Clock()
 
 letra_grande = pygame.font.Font(None, 50)
+letra_media = pygame.font.Font(None, 40)
 letra_pequena = pygame.font.Font(None, 25)
 
 tela_atual = "inicio"
@@ -82,7 +85,7 @@ while True:
                 if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]:
                     gatinho_escolhido = event.key
                     tela_atual = "dificuldade"
-                    sprite_bola = Bolas_de_peloSprite(-10, -10, gatinho_escolhido)
+                    sprite_bola = Bolas_de_peloSprite(-8, -8, gatinho_escolhido)
             elif tela_atual == "dificuldade":
                 if event.key in [pygame.K_1, pygame.K_2]:
                     if event.key == pygame.K_1:
@@ -108,18 +111,16 @@ while True:
                         gatinho_image = pygame.transform.scale(gatinho_image, (641//11, 541//11))
                         x_centro = (640//2)-(gatinho_image.get_width()//2)
 
-            elif tela_atual == "jogofacil":
+            elif tela_atual in ["jogofacil", "jogodificil"]:
+                if event.key == pygame.K_SPACE and sprite_bola.atirando == False:
+                    sprite_bola.rect.topleft = (x_centro, 380)
+                    sprite_bola.atirando = True
                 if event.key == pygame.K_w:
-                    tela_atual = "vitoria" # tá assim só pra dar pra ver a tela tanto de vitória quanto derrota
-                elif event.key == pygame.K_x:
-                    tela_atual = "derrota" # mudar esses elif's por completo depois
-            elif tela_atual == "jogodificil":
-                if event.key == pygame.K_w:
-                    tela_atual = "vitoria"
+                    tela_atual = "vitoria" 
                 elif event.key == pygame.K_x:
                     tela_atual = "derrota"
-            elif tela_atual in ["vitoria", "derrota"] and event.key == pygame.K_RETURN:
-                tela_atual = "inicio"  
+                elif tela_atual in ["vitoria", "derrota"] and event.key == pygame.K_RETURN:
+                    tela_atual = "inicio" 
 
     screen.fill((255, 255, 255))
 
@@ -160,25 +161,26 @@ while True:
         sprites_ratinhos.draw(screen)
 
         teclas = pygame.key.get_pressed()
-        if teclas[pygame.K_LEFT] and x_centro > 0: 
+        if teclas[pygame.K_LEFT] and x_centro > 0:
             x_centro -= 4
         if teclas[pygame.K_RIGHT] and x_centro < 640 - gatinho_image.get_width():
             x_centro += 4
-        if teclas[pygame.K_SPACE]:
-            sprite_bola.rect.topleft = (x_centro, 380)
-            
+
+        if sprite_bola.atirando:
+            sprite_bola.update()
+            screen.blit(sprite_bola.image, sprite_bola.rect.topleft)
+
+            ratinhos_acertados = pygame.sprite.spritecollide(sprite_bola, sprites_ratinhos, True)
+            if ratinhos_acertados:
+                sprite_bola.atirando = False
+                sprite_bola.rect.topleft = (-0, -0)
 
         screen.blit(gatinho_image, (x_centro, 380))
-        screen.blit(sprite_bola.image, sprite_bola.rect.topleft)
-
-        '''colisao = pygame.sprite.spritecollide(sprites_ratinhos, sprite_bola, True)
-        sprite_bola.remove(colisao)'''
-
-        '''if sprite_bola == None:
-            tela_atual == "vitoria"'''
 
     elif tela_atual == "vitoria":
-        desenhar_texto("Você venceu!", letra_grande, 30)
+        desenhar_texto("Parabéns! Você conseguiu", letra_media, 30)
+        desenhar_texto("derrotar todos os ratos", letra_media, 55)
+        desenhar_texto("inimigos!", letra_media, 80)
         desenhar_texto("Tecle ENTER para jogar novamente", letra_pequena, 430)
 
         imagens_gatinhos = {
@@ -194,9 +196,15 @@ while True:
             x_centro = (640//2)-(gatinho_img.get_width()//2)
             y_centro = (480//2)-(gatinho_img.get_height()//2)
             screen.blit(gatinho_img, (x_centro, y_centro))
+           
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                tela_atual = "inicio"  
 
     elif tela_atual == "derrota":
-        desenhar_texto("Você perdeu!", letra_grande, 30)
+        desenhar_texto("O tempo acabou!", letra_media, 30)
+        desenhar_texto("Os ratinhos conseguiram", letra_media, 56)
+        desenhar_texto("dominar a casa dos gatinhos :(", letra_media, 80)
         desenhar_texto("Tecle ENTER para jogar novamente", letra_pequena,430)
 
         ratinho_derrota_img = pygame.image.load('ratinho_derrota.png').convert_alpha()
@@ -204,6 +212,10 @@ while True:
         x_centro1 = (640//2)-(ratinho_derrota_img.get_width()//2)
         y_centro1 = (480//2)-(ratinho_derrota_img.get_height()//2)
         screen.blit(ratinho_derrota_img, (x_centro1, y_centro1))
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                tela_atual = "inicio"  
 
     pygame.display.flip()
     clock.tick(60)
