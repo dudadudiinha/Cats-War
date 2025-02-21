@@ -37,7 +37,12 @@ if tela_atual == "jogofacil":
 else:
     dificuldade_atual = "dificil"
 
-gatinho_escolhido = None
+gatinhos_images = {
+    pygame.K_1: 'gatinhocinza.png',
+    pygame.K_2: 'gatinhomarrom.png',
+    pygame.K_3: 'gatinhopreto.png',
+    pygame.K_4: 'gatinholaranja.png'
+}
 
 while True:
     for event in pygame.event.get():
@@ -70,6 +75,11 @@ while True:
                         RatinhosSprite(300, 300, dificuldade_atual)
                     ]
                     sprites_ratinhos = pygame.sprite.Group(lista_ratinhos)
+
+                    if gatinho_escolhido in gatinhos_images:
+                        gatinho_image = pygame.image.load(gatinhos_images[gatinho_escolhido]).convert_alpha()
+                        gatinho_image = pygame.transform.scale(gatinho_image, (641//11, 541//11))
+                        x_centro = (640//2)-(gatinho_image.get_width()//2)
 
             elif tela_atual == "jogofacil":
                 if event.key == pygame.K_w:
@@ -116,26 +126,21 @@ while True:
 
         screen.blit(gatinhos_img, (x_base, y_base))
 
-    elif tela_atual == "jogofacil":
+    elif tela_atual in ["jogofacil", "jogodificil"]:
         desenhar_texto("Tecle ESPAÇO para atirar", pygame.font.Font(None, 20), 445)
 
         sprites_ratinhos.update()
         sprites_ratinhos.draw(screen)
 
-        gatinhos_images = {
-            pygame.K_1: 'gatinhocinza.png',
-            pygame.K_2: 'gatinhomarrom.png',
-            pygame.K_3: 'gatinhopreto.png',
-            pygame.K_4: 'gatinholaranja.png'
-        }
-       
-        if gatinho_escolhido in gatinhos_images:
-            gatinho_image = pygame.image.load(gatinhos_images[gatinho_escolhido]).convert_alpha()
-            gatinho_image = pygame.transform.scale(gatinho_image, (641//11, 541//11))
-            x_centro = (640//2)-(gatinho_image.get_width()//2)
-            screen.blit(gatinho_image, (x_centro, 380))
+        teclas = pygame.key.get_pressed()
+        if teclas[pygame.K_LEFT] and x_centro > 0: 
+            x_centro -= 4
+        if teclas[pygame.K_RIGHT] and x_centro < 640 - gatinho_image.get_width():
+            x_centro += 4
 
-        bolinhas_images = {
+        screen.blit(gatinho_image, (x_centro, 380))
+        
+        '''bolinhas_images = {
             pygame.K_1: 'bola_cinza.png',
             pygame.K_2: 'bola_marrom.png',
             pygame.K_3: 'bola_preta.png',
@@ -146,39 +151,7 @@ while True:
             bolinhas_image = pygame.image.load(bolinhas_images[gatinho_escolhido]).convert_alpha()
             bolinhas_image = pygame.transform.scale(bolinhas_image, (701//35, 648//35))
             x_centrob = ((640//2)-(bolinhas_image.get_width()//2))-5.5
-            screen.blit(bolinhas_image, (x_centrob, 360))
-
-    elif tela_atual == "jogodificil":
-        desenhar_texto("Tecle ESPAÇO para atirar", pygame.font.Font(None, 20), 445)
-
-        sprites_ratinhos.update()
-        sprites_ratinhos.draw(screen)
-
-        gatinhos_images = {
-            pygame.K_1: 'gatinhocinza.png',
-            pygame.K_2: 'gatinhomarrom.png',
-            pygame.K_3: 'gatinhopreto.png',
-            pygame.K_4: 'gatinholaranja.png'
-        }
-       
-        if gatinho_escolhido in gatinhos_images:
-            gatinho_image = pygame.image.load(gatinhos_images[gatinho_escolhido]).convert_alpha()
-            gatinho_image = pygame.transform.scale(gatinho_image, (641//11, 541//11))
-            x_centro = (640//2)-(gatinho_image.get_width()//2)
-            screen.blit(gatinho_image, (x_centro, 380))
-
-        bolinhas_images = {
-            pygame.K_1: 'bola_cinza.png',
-            pygame.K_2: 'bola_marrom.png',
-            pygame.K_3: 'bola_preta.png',
-            pygame.K_4: 'bola_laranja.png'
-        }
-       
-        if gatinho_escolhido in gatinhos_images:
-            bolinhas_image = pygame.image.load(bolinhas_images[gatinho_escolhido]).convert_alpha()
-            bolinhas_image = pygame.transform.scale(bolinhas_image, (701//35, 648//35))
-            x_centrob = ((640//2)-(bolinhas_image.get_width()//2))-5.5
-            screen.blit(bolinhas_image, (x_centrob, 360))
+            screen.blit(bolinhas_image, (x_centrob, 360))'''
 
     elif tela_atual == "vitoria":
         desenhar_texto("Você venceu!", letra_grande, 30)
