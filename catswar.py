@@ -42,7 +42,7 @@ class Bolas_de_peloSprite(pygame.sprite.Sprite):
         self.image = bolinhas_image
         self.rect = bolinhas_image.get_rect()
         self.rect.topleft = (x, y)
-        self.velocidade = -9
+        self.velocidade = -9.5
         self.atirando = False
 
     def update(self):
