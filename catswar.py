@@ -94,7 +94,7 @@ while True:
                     if event.key == pygame.K_1:
                         tela_atual = "jogofacil"
                         dificuldade_atual = "facil"
-                        tempo_limite = 8
+                        tempo_limite = 10
                     elif event.key == pygame.K_2:
                         tela_atual = "jogodificil"
                         dificuldade_atual = "dificil"
@@ -159,7 +159,7 @@ while True:
         tempo_passado = (pygame.time.get_ticks()-tempo_inicial)//1000
 
         desenhar_texto("Tecle ESPAÇO para atirar", pygame.font.Font(None, 20), 445)
-        texto = pygame.font.Font(None, 25).render(f"Tempo: {tempo_passado}s", True, 'black')
+        texto = letra_pequena.render(f"Tempo: {tempo_passado}s", True, 'black')
         screen.blit(texto, (10, 440))
 
         sprites_ratinhos.update()
@@ -179,6 +179,9 @@ while True:
             if ratinhos_acertados:
                 sprite_bola.atirando = False
                 sprite_bola.rect.topleft = (-0, -0)
+                tempo_limite += 1
+                '''texto2 = letra_pequena.render("Mais um segundo!", True, 'black')
+                screen.blit(texto2, (10, 420))'''
 
         screen.blit(gatinho_image, (x_centro, 380))
 
