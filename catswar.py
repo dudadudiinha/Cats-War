@@ -94,11 +94,11 @@ while True:
                     if event.key == pygame.K_1:
                         tela_atual = "jogofacil"
                         dificuldade_atual = "facil"
-                        tempo_limite = 10
+                        tempo_limite = 8
                     elif event.key == pygame.K_2:
                         tela_atual = "jogodificil"
                         dificuldade_atual = "dificil"
-                        tempo_limite = 5
+                        tempo_limite = 4
 
                     tempo_inicial = pygame.time.get_ticks()    
 
