@@ -76,6 +76,9 @@ gatinhos_images = {
     pygame.K_4: 'gatinholaranja.png'
 }
 
+texto2 = letra_pequena.render("Mais um segundo!", True, 'black')
+tempo_texto2 = 0
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -180,8 +183,10 @@ while True:
                 sprite_bola.atirando = False
                 sprite_bola.rect.topleft = (-0, -0)
                 tempo_limite += 1
-                '''texto2 = letra_pequena.render("Mais um segundo!", True, 'black')
-                screen.blit(texto2, (10, 420))'''
+                tempo_texto2 = pygame.time.get_ticks()
+
+        if (pygame.time.get_ticks() - tempo_texto2)//1000 < 0.04:
+            screen.blit(texto2, (10, 420))
 
         screen.blit(gatinho_image, (x_centro, 380))
 
